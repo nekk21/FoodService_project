@@ -4,10 +4,11 @@ import { getConnectionManager } from 'typeorm'
 import { getManager } from 'typeorm'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const fs: any = require('fs')
+const fs = require('fs')
 
 async function bootstrap() {
     const dataSql = fs.readFileSync('./database/base.sql').toString()
+
     try {
         const connectionManager = getConnectionManager()
         const connection = connectionManager.create({
@@ -21,7 +22,7 @@ async function bootstrap() {
         await connection.connect() // performs connection
 
         const entityManager = getManager()
-        const someQuery = entityManager.query(dataSql)
+        entityManager.query(dataSql)
 
         const app = await NestFactory.create(AppModule)
         await app.listen(3000)
