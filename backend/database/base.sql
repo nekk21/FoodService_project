@@ -1,23 +1,34 @@
-CREATE TABLE ROLE(id serial primary key,
-     role_title varchar (255) UNIQUE DEFAULT('USER'));
+CREATE TABLE ROLES(id serial primary key,
+     name varchar (255) UNIQUE);
 
-
-CREATE TABLE USERR(id serial primary key,
-    name varchar (255) UNIQUE NOT NULL,
+CREATE TABLE USERS(id serial primary key,
+    first_name varchar (255) NOT NULL,
+    last_name  varchar(255) NOT NULL,
     email varchar (255) UNIQUE NOT NULL,
     password varchar(255) NOT NULL,
-    role_id integer references ROLE(id) DEFAULT(3));
+    role_id integer references ROLES(id) DEFAULT(NULL));
 
 
-CREATE TABLE ORDERR(id serial primary key,
-    delivery_time date DEFAULT(NULL),
-    user_id integer references USERR(id));
+CREATE TABLE ORDERS(id serial primary key,
+    delivery_time date NOT NULL,
+    customer_id integer references USERS(id));
 
-CREATE TABLE DISH(id serial primary key,
-    title varchar(255),
+CREATE TABLE DISHES(id serial primary key,
+    name varchar(255),
     description text,
     price float,
-    cook_id integer references USERR(id));
+    cook_id integer references USERS(id));
 
-CREATE TABLE DISH_OREDERR(dish_id integer references DISH(id),
-    order_id integer references ORDERR(id));
+CREATE TABLE DISHES_OREDERS (id serial primary key,
+    dish_id integer references DISHES(id),
+    order_id integer references ORDERS(id));
+
+DROP TABLE DISHES_OREDERS;
+
+DROP TABLE DISHES;
+
+DROP TABLE ORDERS;
+
+DROP TABLE USERS;
+
+DROP TABLE ROLES;
