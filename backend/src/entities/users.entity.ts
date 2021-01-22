@@ -4,10 +4,14 @@ import {
     Column,
     ManyToOne,
     Unique,
+    OneToMany,
 } from 'typeorm'
 
 import { IsEmail } from 'class-validator'
 import RoleEntity from './roles.entity'
+
+import DishEntity from './dishes.entity'
+import OrderEntity from './orders.entity'
 
 @Entity('users')
 @Unique(['email'])
@@ -33,4 +37,10 @@ export default class UserEntity {
 
     @ManyToOne(() => RoleEntity, role => role.users)
     role: RoleEntity
+
+    @OneToMany(() => DishEntity, dish => dish.user_id)
+    dishes: DishEntity[]
+
+    @OneToMany(() => OrderEntity, order => order.customer_id)
+    orders: OrderEntity[]
 }

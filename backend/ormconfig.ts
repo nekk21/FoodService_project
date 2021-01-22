@@ -9,7 +9,7 @@ const config: any = {
     password: '0027',
     database: 'foodDB',
     entities: [path.join(__dirname, '**', `*.entity.{ts,js}`)],
-    migrationsTableName: 'MyMigrations',
+    migrationsTableName: 'Migrations',
     synchronize: false,
     migrations: [path.join(__dirname, '**', `*initDb.{ts,js}`)],
     cli: {
