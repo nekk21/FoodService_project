@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm'
 
-export class initDb1611162016215 implements MigrationInterface {
+export class initDb1611322651203 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
 
@@ -28,9 +28,14 @@ export class initDb1611162016215 implements MigrationInterface {
        CREATE TABLE DISHES_OREDERS (id serial primary key,
            dish_id integer references DISHES(id),
            order_id integer references ORDERS(id));
+
+
+        INSERT INTO USERS(first_name, last_name, email, password, role_id) VALUES ('Admin', 'Adminov', 'admin@gmail.com', 'admin','1');
+        INSERT INTO ROLES(name) VALUES('ADMIN');
+        INSERT INTO ROLES(name) VALUES('COOK');
+
         `)
     }
-
     public async down(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
         DROP TABLE DISHES_OREDERS;

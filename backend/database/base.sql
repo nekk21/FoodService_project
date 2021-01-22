@@ -23,6 +23,10 @@ CREATE TABLE DISHES_OREDERS (id serial primary key,
     dish_id integer references DISHES(id),
     order_id integer references ORDERS(id));
 
+INSERT INTO USERS(first_name, last_name, email, password) VALUES ('Admin', 'Adminov', 'admin@gmail.com', 'admin');
+INSERT INTO ROLES(name) VALUES('ADMIN');
+INSERT INTO ROLES(name) VALUES('COOK');
+
 DROP TABLE DISHES_OREDERS;
 
 DROP TABLE DISHES;
