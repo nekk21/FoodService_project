@@ -1,8 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    ManyToOne,
+    ManyToMany,
+} from 'typeorm'
 
 import UserEntity from './users.entity'
+import DishEntity from './dishes.entity'
 
-@Entity('dishes')
+@Entity('orders')
 export default class OrderEntity {
     @PrimaryGeneratedColumn()
     id: number
@@ -12,4 +19,7 @@ export default class OrderEntity {
 
     @ManyToOne(() => UserEntity, user => user.orders)
     customer_id: UserEntity
+
+    @ManyToMany(() => DishEntity, dish => dish.orders)
+    dishes: DishEntity[]
 }
