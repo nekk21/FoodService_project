@@ -3,12 +3,11 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
-    ManyToMany,
-    JoinTable,
+    OneToMany,
 } from 'typeorm'
 
 import UserEntity from './users.entity'
-import OrderEntity from './orders.entity'
+import Orders_Dishes from './orders_dishes.entity'
 
 @Entity('dishes')
 export default class DishEntity {
@@ -18,16 +17,15 @@ export default class DishEntity {
     @Column({ length: 100 })
     name: string
 
-    @Column({ length: 100 })
+    @Column({ length: 300 })
     description: string
 
     @Column()
     price: number
 
     @ManyToOne(() => UserEntity, user => user.dishes)
-    user_id: UserEntity
+    cook_id: UserEntity
 
-    @ManyToMany(() => OrderEntity, order => order.dishes)
-    @JoinTable()
-    orders: OrderEntity[]
+    @OneToMany(() => Orders_Dishes, orders_dishes => orders_dishes.dish_id)
+    orders_dishes: Orders_Dishes[]
 }

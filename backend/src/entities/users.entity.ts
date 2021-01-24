@@ -32,13 +32,10 @@ export default class UserEntity {
     @Column({ default: '', length: 100 })
     lastName: string
 
-    @Column({ default: '' })
-    image: string
-
     @ManyToOne(() => RoleEntity, role => role.users)
-    role: RoleEntity
+    role_id: RoleEntity
 
-    @OneToMany(() => DishEntity, dish => dish.user_id)
+    @OneToMany(() => DishEntity, dish => dish.cook_id)
     dishes: DishEntity[]
 
     @OneToMany(() => OrderEntity, order => order.customer_id)

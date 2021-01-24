@@ -3,11 +3,11 @@ import {
     PrimaryGeneratedColumn,
     Column,
     ManyToOne,
-    ManyToMany,
+    OneToMany,
 } from 'typeorm'
 
 import UserEntity from './users.entity'
-import DishEntity from './dishes.entity'
+import Orders_Dishes from './orders_dishes.entity'
 
 @Entity('orders')
 export default class OrderEntity {
@@ -20,6 +20,6 @@ export default class OrderEntity {
     @ManyToOne(() => UserEntity, user => user.orders)
     customer_id: UserEntity
 
-    @ManyToMany(() => DishEntity, dish => dish.orders)
-    dishes: DishEntity[]
+    @OneToMany(() => Orders_Dishes, orders_dishes => orders_dishes.order_id)
+    orders_dishes: Orders_Dishes[]
 }
