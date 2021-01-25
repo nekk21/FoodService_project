@@ -33,7 +33,7 @@ export class OrdersService {
         })
 
         if (!order) {
-            const errors = { Company: 'Order is not found' }
+            const errors = { Order: 'Order is not found' }
             throw new HttpException({ errors }, 402)
         }
 

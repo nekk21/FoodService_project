@@ -5,6 +5,7 @@ import {
     ManyToOne,
     Unique,
     OneToMany,
+    BeforeInsert,
 } from 'typeorm'
 
 import { IsEmail } from 'class-validator'
@@ -12,6 +13,8 @@ import RoleEntity from './roles.entity'
 
 import DishEntity from './dishes.entity'
 import OrderEntity from './orders.entity'
+
+import * as argon2 from 'argon2'
 
 @Entity('users')
 @Unique(['email'])
@@ -40,4 +43,9 @@ export default class UserEntity {
 
     @OneToMany(() => OrderEntity, order => order.customer_id)
     orders: OrderEntity[]
+
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await argon2.hash(this.password)
+    }
 }
