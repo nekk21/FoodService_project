@@ -1,10 +1,11 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { validate } from 'class-validator'
-import RoleEntity from 'src/entities/roles.entity'
 import { Repository, getRepository, DeleteResult } from 'typeorm'
 import * as argon2 from 'argon2'
+
 import UserEntity from '../../entities/users.entity'
+import RoleEntity from 'src/entities/roles.entity'
 import CreateUserDto from '../../modules/users/dto/create-User.dto'
 import UpdateUserDto from '../../modules/users/dto/update-User.dto'
 
@@ -12,7 +13,10 @@ import UpdateUserDto from '../../modules/users/dto/update-User.dto'
 export class UsersService {
     constructor(
         @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>
+        private readonly userRepository: Repository<UserEntity>,
+
+        @InjectRepository(UserEntity)
+        private readonly roleRepository: Repository<RoleEntity>
     ) {}
 
     async getAll(): Promise<UserEntity[]> {
@@ -124,8 +128,9 @@ export class UsersService {
         return await this.userRepository.save(currentUser)
     }
 
-    async addRole(id: number, role: RoleEntity): Promise<UserEntity> {
-        const user = await this.userRepository.findOne(id)
+    async addRole(user_id: number, role_id: number): Promise<UserEntity> {
+        const role = await this.roleRepository.findOne(role_id)
+        const user = await this.userRepository.findOne(user_id)
         user.role_id = role
         return this.userRepository.save(user)
     }

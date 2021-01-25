@@ -1,1 +1,3 @@
-export default class CreateOrderDto {}
+export default class CreateOrderDto {
+    readonly delivery_time: string
+}

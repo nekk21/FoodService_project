@@ -12,7 +12,4 @@ export default class CreateUserDto {
 
     @IsNotEmpty()
     readonly password: string
-
-    @IsNotEmpty()
-    readonly role: string
 }
