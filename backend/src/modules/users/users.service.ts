@@ -5,7 +5,7 @@ import { Repository, getRepository, DeleteResult } from 'typeorm'
 import * as argon2 from 'argon2'
 
 import UserEntity from '../../entities/users.entity'
-import RoleEntity from 'src/entities/roles.entity'
+import RoleEntity from '../../entities/roles.entity'
 import CreateUserDto from '../../modules/users/dto/create-User.dto'
 import UpdateUserDto from '../../modules/users/dto/update-User.dto'
 
@@ -15,7 +15,7 @@ export class UsersService {
         @InjectRepository(UserEntity)
         private readonly userRepository: Repository<UserEntity>,
 
-        @InjectRepository(UserEntity)
+        @InjectRepository(RoleEntity)
         private readonly roleRepository: Repository<RoleEntity>
     ) {}
 
