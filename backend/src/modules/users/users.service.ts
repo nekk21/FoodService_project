@@ -54,15 +54,15 @@ export class UsersService {
         return await this.userRepository.delete({ id: id })
     }
 
-    async createUser(
-        dto: CreateUserDto,
+    async create(
+        createData: CreateUserDto,
         role: RoleEntity
     ): Promise<UserEntity> {
         // check uniquene of email
-        const { firstName, lastName, email, password } = dto
+
         const qb = await getRepository(UserEntity)
             .createQueryBuilder('user')
-            .where('user.email = :email', { email })
+            .where('user.email = :email', { email: createData.email })
 
         const user = await qb.getOne()
 
@@ -76,10 +76,10 @@ export class UsersService {
 
         // create new user
         const newUser = new UserEntity()
-        newUser.firstName = firstName
-        newUser.lastName = lastName
-        newUser.email = email
-        newUser.password = password
+        newUser.firstName = createData.firstName
+        newUser.lastName = createData.lastName
+        newUser.email = createData.email
+        newUser.password = createData.password
         if (role) newUser.role_id = role
 
         const errors = await validate(newUser)
@@ -96,7 +96,6 @@ export class UsersService {
     }
 
     async update(id: number, updateData: UpdateUserDto): Promise<UserEntity> {
-        const updatedUser: UpdateUserDto = updateData
         const currentUser = await this.userRepository.findOne(id)
 
         if (!currentUser) {
@@ -107,14 +106,14 @@ export class UsersService {
             )
         }
 
-        if (updatedUser.password) {
-            currentUser.password = await argon2.hash(updatedUser.password)
+        if (updateData.password) {
+            currentUser.password = await argon2.hash(updateData.password)
         }
-        if (updatedUser.firstName) {
-            currentUser.firstName = updatedUser.firstName
+        if (updateData.firstName) {
+            currentUser.firstName = updateData.firstName
         }
-        if (updatedUser.lastName) {
-            currentUser.lastName = updatedUser.lastName
+        if (updateData.lastName) {
+            currentUser.lastName = updateData.lastName
         }
 
         const errors = await validate(currentUser)

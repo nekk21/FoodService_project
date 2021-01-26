@@ -1,4 +1,4 @@
-export default class CreateUserDto {
+export default class UpdateUserDto {
     readonly firstName: string
 
     readonly lastName: string
