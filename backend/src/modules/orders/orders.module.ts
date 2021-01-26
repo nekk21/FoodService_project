@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-
 import { TypeOrmModule } from '@nestjs/typeorm'
+
 import DishEntity from 'src/entities/dishes.entity'
 import OrderEntity from 'src/entities/orders.entity'
 import Orders_Dishes from 'src/entities/orders_dishes.entity'
