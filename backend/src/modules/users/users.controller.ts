@@ -18,6 +18,7 @@ import { Public } from 'src/decorators/public.decorator'
 import { Roles } from 'src/decorators/role.decorator'
 import { LoginUserDto } from './dto/login-User.dto'
 import UserEntity from 'src/entities/users.entity'
+import CreateUserDto from './dto/create-User.dto'
 
 @Controller('users')
 export class UsersController {
@@ -29,21 +30,10 @@ export class UsersController {
     @Public()
     @Post('signup')
     async signup(
-        @Body('email') email: string,
-        @Body('firstName') firstName: string,
-        @Body('lastName') lastName: string,
-        @Body('password') password: string,
+        @Body() data: CreateUserDto,
         @Body('role_id') role: RoleEntity
     ) {
-        return this.userService.create(
-            {
-                email,
-                firstName,
-                lastName,
-                password,
-            },
-            role
-        )
+        return await this.userService.create(data, role)
     }
 
     @Public()
@@ -54,8 +44,10 @@ export class UsersController {
         const errors = { User: ' not found' }
         if (!_user) throw new HttpException({ errors }, 402)
 
-        const token = await (await this.authService.login(loginUserDto))
-            .access_token
+        const token = await await this.authService.login(loginUserDto)
+        if (!token) {
+            throw new HttpException({ message: 'Wrong password' }, 402)
+        }
         const { id, email } = _user
         const user = {
             id,
@@ -77,6 +69,11 @@ export class UsersController {
         return await this.userService.getById(req.user.id)
     }
 
+    @Get('')
+    async GetMe(@Request() req): Promise<UserEntity> {
+        return await this.userService.getById(req.user.id)
+    }
+
     @Get('profile/:id')
     async findMe(@Param() params): Promise<UserEntity> {
         return await this.userService.getById(params.id)
@@ -94,13 +91,17 @@ export class UsersController {
         return deleteResult
     }
 
-    @Post('profile/role')
-    async profileAddRole(@Request() req, @Body('role') role: number) {
-        return await this.userService.addRole(req.user.id, role)
+    @Post('cook')
+    async profileAddRole(@Request() req) {
+        await this.userService.becomeCook(req.user.id)
+        req.logout()
+        return { message: 'Role change success. Please relog' }
     }
 
-    @Delete('profile/role')
+    @Post('uncook')
     async profileRemoveRole(@Request() req) {
-        return await this.userService.removeRole(req.user.id)
+        await this.userService.removeRole(req.user.id)
+        req.logout()
+        return { message: 'Role change success. Please relog' }
     }
 }

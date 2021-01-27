@@ -59,19 +59,29 @@ export class UsersService {
         role: RoleEntity
     ): Promise<UserEntity> {
         // check uniquene of email
-
-        const qb = await getRepository(UserEntity)
-            .createQueryBuilder('user')
-            .where('user.email = :email', { email: createData.email })
-
-        const user = await qb.getOne()
-
-        if (user) {
-            const errors = { username: 'Username and email must be unique.' }
+        let errors = await validate(createData)
+        if (errors.length > 0) {
+            const _errors = { message: 'All fields are required' }
             throw new HttpException(
-                { message: 'Input data validation failed', errors },
+                { message: 'Input data validation failed', _errors },
                 HttpStatus.BAD_REQUEST
             )
+        }
+
+        try {
+            const user = await this.userRepository.findOne({
+                where: { email: createData.email },
+            })
+
+            if (user) {
+                const errors = { email: 'email must be unique.' }
+                throw new HttpException(
+                    { message: 'Input data validation failed', errors },
+                    HttpStatus.BAD_REQUEST
+                )
+            }
+        } catch (err) {
+            console.log(err)
         }
 
         // create new user
@@ -82,7 +92,7 @@ export class UsersService {
         newUser.password = createData.password
         if (role) newUser.role_id = role
 
-        const errors = await validate(newUser)
+        errors = await validate(newUser)
         if (errors.length > 0) {
             const _errors = { username: 'Userinput is not valid.' }
             throw new HttpException(
@@ -129,6 +139,13 @@ export class UsersService {
 
     async addRole(user_id: number, role_id: number): Promise<UserEntity> {
         const role = await this.roleRepository.findOne(role_id)
+        const user = await this.userRepository.findOne(user_id)
+        user.role_id = role
+        return this.userRepository.save(user)
+    }
+
+    async becomeCook(user_id: number): Promise<UserEntity> {
+        const role = await this.roleRepository.findOne(2)
         const user = await this.userRepository.findOne(user_id)
         user.role_id = role
         return this.userRepository.save(user)

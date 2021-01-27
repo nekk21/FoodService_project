@@ -4,6 +4,7 @@ import { Repository } from 'typeorm'
 import UserEntity from '../../entities/users.entity'
 import { InjectRepository } from '@nestjs/typeorm'
 import { LoginUserDto } from '../users/dto/login-User.dto'
+import * as argon2 from 'argon2'
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,14 @@ export class AuthService {
     ) {}
 
     async validateUser(userData: LoginUserDto): Promise<UserEntity> {
-        const user = await this.userRepository.findOne(userData)
-        if (user) {
+        const user = await this.userRepository.findOne({
+            email: userData.email,
+        })
+        if (!user) {
+            return null
+        }
+
+        if (await argon2.verify(user.password, userData.password)) {
             return user
         }
         return null
@@ -27,10 +34,11 @@ export class AuthService {
         const payload = {
             email: userData.email,
             id: userData.id,
-            role: userData.role_id.name,
+            role: null,
         }
-        return {
-            access_token: this.jwtService.sign(payload),
+        if (userData.role) {
+            payload.role = userData.role.name
         }
+        return this.jwtService.sign(payload)
     }
 }

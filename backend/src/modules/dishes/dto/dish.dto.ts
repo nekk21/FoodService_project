@@ -1,4 +1,5 @@
 export default class DishDto {
-    readonly id: number
-    readonly
+    readonly name: string
+    readonly description: string
+    readonly price: number
 }

@@ -19,6 +19,14 @@ import * as argon2 from 'argon2'
 @Entity('users')
 @Unique(['email'])
 export default class UserEntity {
+    set role_id(val) {
+        this.role = val
+    }
+
+    get role_id() {
+        return this.role
+    }
+
     @PrimaryGeneratedColumn()
     id: number
 
@@ -35,13 +43,13 @@ export default class UserEntity {
     @Column({ default: '', length: 100 })
     lastName: string
 
-    @ManyToOne(() => RoleEntity, role => role.users)
-    role_id: RoleEntity
+    @ManyToOne(() => RoleEntity, role => role.users, { eager: true })
+    role: RoleEntity
 
-    @OneToMany(() => DishEntity, dish => dish.cook_id)
+    @OneToMany(() => DishEntity, dish => dish.cook)
     dishes: DishEntity[]
 
-    @OneToMany(() => OrderEntity, order => order.customer_id)
+    @OneToMany(() => OrderEntity, order => order.customer)
     orders: OrderEntity[]
 
     @BeforeInsert()

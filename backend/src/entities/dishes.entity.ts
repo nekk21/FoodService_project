@@ -11,6 +11,14 @@ import Orders_Dishes from './orders_dishes.entity'
 
 @Entity('dishes')
 export default class DishEntity {
+    set cook_id(val) {
+        this.cook = val
+    }
+
+    get cook_id() {
+        return this.cook
+    }
+
     @PrimaryGeneratedColumn()
     id: number
 
@@ -23,9 +31,9 @@ export default class DishEntity {
     @Column()
     price: number
 
-    @ManyToOne(() => UserEntity, user => user.dishes)
-    cook_id: UserEntity
+    @ManyToOne(() => UserEntity, user => user.dishes, { eager: true })
+    cook: UserEntity
 
-    @OneToMany(() => Orders_Dishes, orders_dishes => orders_dishes.dish_id)
+    @OneToMany(() => Orders_Dishes, orders_dishes => orders_dishes.dish)
     orders_dishes: Orders_Dishes[]
 }

@@ -17,6 +17,6 @@ export default class RoleEntity {
     @Column({ length: 100 })
     name: string
 
-    @OneToMany(() => UserEntity, user => user.role_id)
+    @OneToMany(() => UserEntity, users => users.role)
     users: UserEntity[]
 }

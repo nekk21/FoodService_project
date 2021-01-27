@@ -6,6 +6,7 @@ import {
     Delete,
     Controller,
     Request,
+    Param,
 } from '@nestjs/common'
 import { OrdersService } from './orders.service'
 import OrderEntity from '../../entities/orders.entity'
@@ -18,6 +19,12 @@ export class OrdersController {
     async getOrders(@Request() req): Promise<OrderEntity[]> {
         const orders = await this.ordersService.getAll(req.user.id)
         return orders
+    }
+
+    @Get('/:id')
+    async getOrder(@Request() req, @Param() params): Promise<OrderEntity> {
+        const order = await this.ordersService.getById(req.user.id, params.id)
+        return order
     }
 
     @Post('')

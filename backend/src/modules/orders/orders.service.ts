@@ -24,21 +24,32 @@ export class OrdersService {
         private readonly dishesRepository: Repository<DishEntity>
     ) {}
 
-    async getAll(id: number): Promise<OrderEntity[]> {
-        return await this.orderRepository.find({ where: { customer_id: id } })
+    async getAll(customer_id: number): Promise<OrderEntity[]> {
+        return await this.orderRepository.find({
+            where: { customer: customer_id },
+        })
     }
 
     async deleteById(customer_id: number, id: number): Promise<OrderEntity> {
-        const order = await this.getById(id, customer_id)
+        const order = await this.getById(customer_id, id)
+
+        const orders_dishes = await this.ordersDishesRepository.find({
+            where: {
+                order: order,
+            },
+        })
+
+        await this.ordersDishesRepository.remove(orders_dishes)
+
         return await this.orderRepository.remove(order)
     }
 
     async getById(customer_id: number, id: number): Promise<OrderEntity> {
         const order = await this.orderRepository.findOne({
-            relations: ['users'],
+            relations: ['customer'],
             where: {
                 id: id,
-                users: { id: customer_id },
+                customer: { id: customer_id },
             },
         })
 
@@ -68,7 +79,7 @@ export class OrdersService {
                 HttpStatus.BAD_REQUEST
             )
         } else {
-            const savedOrder = await this.userRepository.save(newOrder)
+            const savedOrder = await this.orderRepository.save(newOrder)
             return savedOrder
         }
     }
@@ -78,7 +89,7 @@ export class OrdersService {
         order_id: number,
         dish_id: number
     ): Promise<OrderEntity> {
-        const order = await this.getById(order_id, customer_id)
+        const order = await this.getById(customer_id, order_id)
         const dish = await this.dishesRepository.findOne(dish_id)
 
         const newOrdersDishes = new OrdersDishesEntity()
@@ -87,7 +98,7 @@ export class OrdersService {
 
         await this.ordersDishesRepository.save(newOrdersDishes)
 
-        const savedOrder = await this.getById(order_id, customer_id)
+        const savedOrder = await this.getById(customer_id, order_id)
 
         return savedOrder
     }
