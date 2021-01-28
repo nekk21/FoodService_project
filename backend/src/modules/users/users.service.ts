@@ -1,7 +1,7 @@
 import { Injectable, HttpStatus, HttpException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { validate } from 'class-validator'
-import { Repository, getRepository, DeleteResult } from 'typeorm'
+import { Repository, DeleteResult } from 'typeorm'
 import * as argon2 from 'argon2'
 
 import UserEntity from '../../entities/users.entity'
@@ -52,6 +52,10 @@ export class UsersService {
 
     async deleteById(id: number): Promise<DeleteResult> {
         return await this.userRepository.delete({ id: id })
+    }
+
+    async adminDeleteById(id: number): Promise<DeleteResult> {
+        return await this.userRepository.delete(id)
     }
 
     async create(
