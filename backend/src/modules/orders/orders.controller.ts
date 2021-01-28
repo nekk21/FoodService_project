@@ -16,7 +16,7 @@ export class OrdersController {
     constructor(private readonly ordersService: OrdersService) {}
 
     @Get('')
-    async getOrders(@Request() req): Promise<OrderEntity[]> {
+    async getMyOrders(@Request() req): Promise<OrderEntity[]> {
         const orders = await this.ordersService.getAll(req.user.id)
         return orders
     }
@@ -28,9 +28,12 @@ export class OrdersController {
     }
 
     @Post('')
-    async postOrder(@Request() req): Promise<OrderEntity> {
+    async postOrder(
+        @Request() req,
+        @Body() data: string
+    ): Promise<OrderEntity> {
         ///test version
-        return await this.ordersService.create(req.user.id, new Date())
+        return await this.ordersService.create(req.user.id, data)
     }
 
     @Put('')

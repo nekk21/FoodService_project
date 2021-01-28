@@ -4,21 +4,14 @@ import {
     Column,
     ManyToOne,
     OneToMany,
+    JoinColumn,
 } from 'typeorm'
 
 import UserEntity from './users.entity'
-import Orders_Dishes from './orders_dishes.entity'
+import OrdersDishes from './ordersDishes.entity'
 
 @Entity('dishes')
 export default class DishEntity {
-    set cook_id(val) {
-        this.cook = val
-    }
-
-    get cook_id() {
-        return this.cook
-    }
-
     @PrimaryGeneratedColumn()
     id: number
 
@@ -32,8 +25,9 @@ export default class DishEntity {
     price: number
 
     @ManyToOne(() => UserEntity, user => user.dishes, { eager: true })
+    @JoinColumn({ name: 'cook_id' })
     cook: UserEntity
 
-    @OneToMany(() => Orders_Dishes, orders_dishes => orders_dishes.dish)
-    orders_dishes: Orders_Dishes[]
+    @OneToMany(() => OrdersDishes, ordersDishes => ordersDishes.dish)
+    ordersDishes: OrdersDishes[]
 }

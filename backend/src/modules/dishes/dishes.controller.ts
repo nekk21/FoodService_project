@@ -37,13 +37,13 @@ export class DishesController {
     }
 
     @Roles('COOK')
-    @Get()
+    @Get('/my')
     async getMyDishes(@Request() req): Promise<DishEntity[]> {
         const dishes = await this.DishService.getMyDishes(req.user.id)
         return dishes
     }
 
-    @Get('/all')
+    @Get()
     async getDishes(): Promise<DishEntity[]> {
         const dishes = await this.DishService.getAll()
         return dishes

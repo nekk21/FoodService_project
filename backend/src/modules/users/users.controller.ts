@@ -77,7 +77,7 @@ export class UsersController {
         return await this.userService.getById(req.user.id)
     }
 
-    @Get('profile/:id')
+    @Get('/:id/profile')
     async findMe(@Param() params): Promise<UserEntity> {
         return await this.userService.getById(params.id)
     }
@@ -87,7 +87,7 @@ export class UsersController {
         return await this.userService.update(req.user.id, userData)
     }
 
-    @Delete('profile')
+    @Delete('/me')
     async delete(@Request() req) {
         const deleteResult = await this.userService.deleteById(req.user.id)
         req.logout()
@@ -95,7 +95,7 @@ export class UsersController {
     }
 
     @Roles('ADMIN')
-    @Delete('/one')
+    @Delete('/this')
     async adminDelete(@Body() id: number) {
         const deleteResult = await this.userService.adminDeleteById(id)
         return deleteResult

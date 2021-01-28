@@ -70,7 +70,7 @@ export class DishesService {
 
         const newDish = new DishEntity()
 
-        newDish.cook_id = cook
+        newDish.cook = cook
         newDish.name = createData.name
         newDish.description = createData.description
         newDish.price = createData.price

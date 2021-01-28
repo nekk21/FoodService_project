@@ -4,40 +4,26 @@ import {
     Column,
     ManyToOne,
     OneToMany,
+    JoinColumn,
 } from 'typeorm'
 
 import UserEntity from './users.entity'
-import Orders_Dishes from './orders_dishes.entity'
+import OrdersDishes from './ordersDishes.entity'
 
 @Entity('orders')
 export default class OrderEntity {
-    set customer_id(val) {
-        this.customer = val
-    }
-
-    get customer_id() {
-        return this.customer
-    }
-
-    set delivery_time(val) {
-        this.deliveryTime = val
-    }
-
-    get delivery_time() {
-        return this.deliveryTime
-    }
-
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @Column({ name: 'delivery_time' })
     deliveryTime: Date
 
     @ManyToOne(() => UserEntity, users => users.orders, { eager: true })
+    @JoinColumn({ name: 'customer' })
     customer: UserEntity
 
-    @OneToMany(() => Orders_Dishes, orders_dishes => orders_dishes.order, {
+    @OneToMany(() => OrdersDishes, ordersDishes => ordersDishes.order, {
         eager: true,
     })
-    orders_dishes: Orders_Dishes[]
+    ordersDishes: OrdersDishes[]
 }

@@ -6,6 +6,7 @@ import {
     Unique,
     OneToMany,
     BeforeInsert,
+    JoinColumn,
 } from 'typeorm'
 
 import { IsEmail } from 'class-validator'
@@ -19,14 +20,6 @@ import * as argon2 from 'argon2'
 @Entity('users')
 @Unique(['email'])
 export default class UserEntity {
-    set role_id(val) {
-        this.role = val
-    }
-
-    get role_id() {
-        return this.role
-    }
-
     @PrimaryGeneratedColumn()
     id: number
 
@@ -37,13 +30,14 @@ export default class UserEntity {
     @Column()
     password: string
 
-    @Column({ default: '', length: 100 })
+    @Column({ name: 'first_name', length: 100 })
     firstName: string
 
-    @Column({ default: '', length: 100 })
+    @Column({ name: 'last_name', length: 100 })
     lastName: string
 
     @ManyToOne(() => RoleEntity, role => role.users, { eager: true })
+    @JoinColumn({ name: 'role_id' })
     role: RoleEntity
 
     @OneToMany(() => DishEntity, dish => dish.cook)

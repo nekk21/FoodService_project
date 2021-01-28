@@ -94,7 +94,7 @@ export class UsersService {
         newUser.lastName = createData.lastName
         newUser.email = createData.email
         newUser.password = createData.password
-        if (role) newUser.role_id = role
+        if (role) newUser.role = role
 
         errors = await validate(newUser)
         if (errors.length > 0) {
@@ -144,20 +144,20 @@ export class UsersService {
     async addRole(user_id: number, role_id: number): Promise<UserEntity> {
         const role = await this.roleRepository.findOne(role_id)
         const user = await this.userRepository.findOne(user_id)
-        user.role_id = role
+        user.role = role
         return this.userRepository.save(user)
     }
 
     async becomeCook(user_id: number): Promise<UserEntity> {
         const role = await this.roleRepository.findOne(2)
         const user = await this.userRepository.findOne(user_id)
-        user.role_id = role
+        user.role = role
         return this.userRepository.save(user)
     }
 
     async removeRole(id: number): Promise<UserEntity> {
         const user = await this.userRepository.findOne(id)
-        user.role_id = null
+        user.role = null
         return this.userRepository.save(user)
     }
 }

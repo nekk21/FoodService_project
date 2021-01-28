@@ -6,7 +6,7 @@ import { validate } from 'class-validator'
 import OrderEntity from 'src/entities/orders.entity'
 import UserEntity from '../../entities/users.entity'
 import DishEntity from '../../entities/dishes.entity'
-import OrdersDishesEntity from '../../entities/orders_dishes.entity'
+import OrdersDishesEntity from '../../entities/ordersDishes.entity'
 
 @Injectable()
 export class OrdersService {
@@ -63,13 +63,15 @@ export class OrdersService {
 
     async create(
         customer_id: number,
-        delivery_time: Date
+        delivery_time: any
     ): Promise<OrderEntity> {
         const customer = await this.userRepository.findOne(customer_id)
 
+        const date = delivery_time.data
+
         const newOrder = new OrderEntity()
-        newOrder.customer_id = customer
-        newOrder.delivery_time = delivery_time
+        newOrder.customer = customer
+        newOrder.deliveryTime = date
 
         const errors = await validate(newOrder)
         if (errors.length > 0) {
@@ -93,8 +95,8 @@ export class OrdersService {
         const dish = await this.dishesRepository.findOne(dish_id)
 
         const newOrdersDishes = new OrdersDishesEntity()
-        newOrdersDishes.order_id = order
-        newOrdersDishes.dish_id = dish
+        newOrdersDishes.order = order
+        newOrdersDishes.dish = dish
 
         await this.ordersDishesRepository.save(newOrdersDishes)
 
