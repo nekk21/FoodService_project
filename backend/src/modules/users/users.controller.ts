@@ -29,10 +29,7 @@ export class UsersController {
 
     @Public()
     @Post('signup')
-    async signup(
-        @Body() data: CreateUserDto,
-        @Body('role_id') role: RoleEntity
-    ) {
+    async signup(@Body() data: CreateUserDto, @Body('role') role: RoleEntity) {
         return await this.userService.create(data, role)
     }
 
@@ -64,12 +61,18 @@ export class UsersController {
     }
 
     @Roles('ADMIN')
-    @Get('profile')
-    async findProfileById(@Request() req): Promise<UserEntity> {
-        return await this.userService.getById(req.user.id)
+    @Get('')
+    async getAll() {
+        return await this.userService.getAll()
     }
 
-    @Get('')
+    @Roles('ADMIN')
+    @Post('profile')
+    async findProfileById(@Body() id: number): Promise<UserEntity> {
+        return await this.userService.getById(id)
+    }
+
+    @Get('/me')
     async GetMe(@Request() req): Promise<UserEntity> {
         return await this.userService.getById(req.user.id)
     }
@@ -88,6 +91,13 @@ export class UsersController {
     async delete(@Request() req) {
         const deleteResult = await this.userService.deleteById(req.user.id)
         req.logout()
+        return deleteResult
+    }
+
+    @Roles('ADMIN')
+    @Delete('/one')
+    async adminDelete(@Body() id: number) {
+        const deleteResult = await this.userService.adminDeleteById(id)
         return deleteResult
     }
 

@@ -26,7 +26,7 @@
        
        INSERT INTO ROLES("name") VALUES('ADMIN');
        INSERT INTO ROLES("name") VALUES('COOK');
-       INSERT INTO USERS("firstName", "lastName", "email", "password", "roleId") VALUES ('Admin', 'Adminov', 'admin@gmail.com', 'admin','1');
+       INSERT INTO USERS("firstName", "lastName", "email", "password", "roleId") VALUES ('Admin', 'Adminov', 'admin@gmail.com', '$argon2i$v=19$m=4096,t=3,p=1$0QoSOwVmJr5d9KrhhCPOzQ$AYrei/Y4WPSSk3MEZCocrW0hZdWQIsNKCvX6+/tHLlQ','1');
 
         DROP TABLE ORDERS_DISHES;
 
