@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+//
 import ModalWindow from './ModalWindow'
+import SignUpForm from './Forms/SignUpForm'
+import SignInForm from './Forms/SignInForm'
 
 export const NavStyled = styled.div`
     .nav-wrapper {
@@ -24,6 +27,17 @@ function NavBar({ page }) {
     const [modalActive, setmodalActive] = useState(false)
     const [modalActiveSign, setmodalActiveSign] = useState(false)
 
+    const logoutButton = (
+        <li className="padd">
+            <button
+                onClick={() => {}}
+                className="btn waves-effect waves-light #ffeb3b yellow black-text"
+            >
+                Log Out
+            </button>
+        </li>
+    )
+
     let modalLogIn = ''
     let modalSignUp = ''
 
@@ -31,19 +45,8 @@ function NavBar({ page }) {
 
     ////////Content Inside
 
-    const modalLogInContent = ''
-    const modalSignUpContent = ''
-
-    // const buttonLogOut = (
-    //     <li className="padd">
-    //         <button
-    //             onClick={() => {}}
-    //             className="btn waves-effect waves-light #757575 grey darken-1"
-    //         >
-    //             Log Out
-    //         </button>
-    //     </li>
-    // )
+    const modalLogInContent = <SignInForm />
+    const modalSignUpContent = <SignUpForm />
 
     switch (page) {
         case '/':
@@ -67,7 +70,7 @@ function NavBar({ page }) {
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
                     <li className="buttons">
                         <button
-                            className="btn waves-effect waves-light #757575 grey darken-1"
+                            className="btn waves-effect waves-light #ffeb3b yellow black-text"
                             onClick={() => setmodalActiveSign(true)}
                         >
                             Sign Up
@@ -75,10 +78,10 @@ function NavBar({ page }) {
                     </li>
                     <li className="buttons">
                         <button
-                            className="btn waves-effect waves-light #757575 grey darken-1"
+                            className="btn waves-effect waves-light #ffeb3b yellow black-text"
                             onClick={() => setmodalActive(true)}
                         >
-                            Log In
+                            Sign In
                         </button>
                     </li>
                 </ul>
@@ -94,14 +97,18 @@ function NavBar({ page }) {
             content = ''
             break
         default:
-            content = ''
+            content = (
+                <ul id="nav-mobile" className="right hide-on-med-and-down">
+                    {logoutButton}
+                </ul>
+            )
     }
 
     return (
         <>
             <NavStyled>
                 <nav>
-                    <div className="nav-wrapper #bdbdbd grey lighten-1">
+                    <div className="nav-wrapper #424242 grey darken-3">
                         <Link to="/" className="brand-logo">
                             FOOD SERVISE
                         </Link>
