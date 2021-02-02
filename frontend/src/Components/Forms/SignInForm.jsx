@@ -19,9 +19,10 @@ const SignInForm = observer(() => {
             const userData = response.data
             user.setIsAuth(true)
             user.setUser(userData)
-            history.push('/')
-            console.log(userData)
+            history.push('/user')
+            ///
             console.log(user.isAuth)
+            ///
             return response
         } catch (e) {
             alert('Wrong Input Data!')

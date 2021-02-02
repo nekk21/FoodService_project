@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react'
-
-import DaysContainer from '../Components/DaysContainer'
-import DishesContainer from '../Components/DishesContainer'
 import NavBar from '../Components/NavBar'
 
-function Main_P(props) {
+function User_P(props) {
     const path = '/'
 
     useEffect(() => {
@@ -13,13 +10,9 @@ function Main_P(props) {
 
     return (
         <>
-            <div>
-                <NavBar page={path} />
-                <DaysContainer />
-                <DishesContainer />
-            </div>
+            <NavBar page={path} />
         </>
     )
 }
 
-export default Main_P
+export default User_P
