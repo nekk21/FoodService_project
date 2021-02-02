@@ -30,7 +30,13 @@ export class UsersController {
     @Public()
     @Post('signup')
     async signup(@Body() data: CreateUserDto, @Body('role') role: RoleEntity) {
-        return await this.userService.create(data, role)
+        const user = await this.userService.create(data, role)
+        // const loginedUser = await this.login({
+        //     email: data.email,
+        //     password: data.password,
+        // })
+
+        return user
     }
 
     @Public()

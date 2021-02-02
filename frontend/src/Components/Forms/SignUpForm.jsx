@@ -1,9 +1,25 @@
-import React from 'react'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { StyledForm } from './SignInForm'
+import { StyledForm } from './StyledForm'
+import { register } from '../../http/userAPI'
+import { observer } from 'mobx-react-lite'
+// import { Context } from '../..'
+// import { useContext } from 'react'
 
-function SignUpForm() {
+const SignUpForm = observer(() => {
+    // const { user } = useContext(Context)
+    ///signUp in func
+    const signUp = async data => {
+        try {
+            const response = await register(data)
+            console.log(response.data)
+            alert('Sucsess!')
+            return response
+        } catch (e) {
+            alert('User allready Exist!')
+        }
+    }
+
     const SignUpSchema = yup.object().shape({
         firstName: yup
             .string()
@@ -29,11 +45,17 @@ function SignUpForm() {
             lastName: '',
             email: '',
             password: '',
-            role: null,
+            role: [],
         },
         validationSchema: SignUpSchema,
         onSubmit: values => {
-            console.log(values)
+            if (values.role != null && values.role.length < 1) {
+                values.role = null
+            }
+            if (values.role != null) {
+                values.role = 2
+            }
+            signUp(values)
         },
     })
 
@@ -126,6 +148,6 @@ function SignUpForm() {
             </StyledForm>
         </>
     )
-}
+})
 
 export default SignUpForm

@@ -1,56 +1,33 @@
-import React from 'react'
 import { useFormik } from 'formik'
+import { observer } from 'mobx-react-lite'
+import { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
 import * as yup from 'yup'
-import styled from 'styled-components'
+import { Context } from '../..'
+import { logIn } from '../../http/userAPI'
+import { StyledForm } from './StyledForm'
 
-export const StyledForm = styled.div`
-    .warning {
-        color: crimson;
-    }
-    .buttons {
-        display: flex;
-        justify-content: center;
-    }
+const SignInForm = observer(() => {
+    const { user } = useContext(Context)
 
-    .input-field label {
-        color: #000;
-    }
+    const history = useHistory()
+    ///signIn in func
 
-    .input-field input[type='text']:focus + label {
-        color: #000;
-    }
-
-    .input-field input[type='text']:focus {
-        border-bottom: 1px solid #ffeb3b;
-        box-shadow: 0 1px 0 0 #ffeb3b;
-    }
-
-    .input-field input[type='password']:focus {
-        border-bottom: 1px solid #ffeb3b;
-        box-shadow: 0 1px 0 0 #ffeb3b;
+    const signIn = async data => {
+        try {
+            const response = await logIn(data)
+            const userData = response.data
+            user.setIsAuth(true)
+            user.setUser(userData)
+            history.push('/')
+            console.log(userData)
+            console.log(user.isAuth)
+            return response
+        } catch (e) {
+            alert('Wrong Input Data!')
+        }
     }
 
-    .input-field input[type='email']:focus {
-        border-bottom: 1px solid #ffeb3b;
-        box-shadow: 0 1px 0 0 #ffeb3b;
-    }
-
-    .input-field input[type='number']:focus {
-        border-bottom: 1px solid #ffeb3b;
-        box-shadow: 0 1px 0 0 #ffeb3b;
-    }
-
-    .input-field input[type='text'].invalid {
-        border-bottom: 1px solid #000;
-        box-shadow: 0 1px 0 0 #000;
-    }
-
-    .input-field .prefix.active {
-        color: #000;
-    }
-`
-
-const SignInForm = () => {
     const SignInSchema = yup.object().shape({
         email: yup
             .string()
@@ -70,7 +47,7 @@ const SignInForm = () => {
         },
         validationSchema: SignInSchema,
         onSubmit: values => {
-            console.log(values)
+            signIn(values)
         },
     })
     return (
@@ -111,7 +88,6 @@ const SignInForm = () => {
                         <button
                             className="btn waves-effect waves-light #ffeb3b yellow black-text"
                             type="submit"
-                            name="action"
                         >
                             Submit
                         </button>
@@ -120,6 +96,6 @@ const SignInForm = () => {
             </StyledForm>
         </>
     )
-}
+})
 
 export default SignInForm

@@ -72,21 +72,21 @@ export class UsersService {
             )
         }
 
-        try {
-            const user = await this.userRepository.findOne({
-                where: { email: createData.email },
-            })
+        // try {
+        const user = await this.userRepository.findOne({
+            where: { email: createData.email },
+        })
 
-            if (user) {
-                const errors = { email: 'email must be unique.' }
-                throw new HttpException(
-                    { message: 'Input data validation failed', errors },
-                    HttpStatus.BAD_REQUEST
-                )
-            }
-        } catch (err) {
-            console.log(err)
+        if (user) {
+            const errors = { email: 'email must be unique.' }
+            throw new HttpException(
+                { message: 'Input data validation failed', errors },
+                HttpStatus.BAD_REQUEST
+            )
         }
+        // } catch (err) {
+        //     console.log(err)
+        // }
 
         // create new user
         const newUser = new UserEntity()
@@ -98,7 +98,7 @@ export class UsersService {
 
         errors = await validate(newUser)
         if (errors.length > 0) {
-            const _errors = { username: 'Userinput is not valid.' }
+            const _errors = { username: 'User input is not valid.' }
             throw new HttpException(
                 { message: 'Input data validation failed', _errors },
                 HttpStatus.BAD_REQUEST
