@@ -2,7 +2,7 @@ import React from 'react'
 import NavBar from '../Components/NavBar'
 
 function CookRole_P(props) {
-    const page = '/cook_role'
+    const page = '/cook'
     return (
         <div>
             <NavBar page={page} />

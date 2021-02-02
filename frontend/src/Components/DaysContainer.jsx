@@ -1,6 +1,6 @@
 import React from 'react'
 
-function DaysContainer(props) {
+function DaysContainer() {
     return <div></div>
 }
 

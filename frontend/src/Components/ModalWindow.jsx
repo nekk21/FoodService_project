@@ -32,9 +32,9 @@ export const LoginModalStyle = styled.div`
     .modal_content.active {
         transform: scale(1);
     }
-    .buttons {
-        display: flex;
-        justify-content: space-between;
+    .close {
+        float: right;
+        cursor: pointer;
     }
 `
 
@@ -51,6 +51,12 @@ const ModalWindow = ({ active, setActive, children }) => {
                     }
                     onClick={e => e.stopPropagation()}
                 >
+                    <i
+                        className="close material-icons"
+                        onClick={() => setActive(false)}
+                    >
+                        close
+                    </i>
                     {children}
                 </div>
             </div>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
 //
 import ModalWindow from './ModalWindow'
 import SignUpForm from './Forms/SignUpForm'
 import SignInForm from './Forms/SignInForm'
+import { Context } from '..'
 
 export const NavStyled = styled.div`
     .nav-wrapper {
@@ -23,9 +25,17 @@ export const NavStyled = styled.div`
     }
 `
 
-function NavBar({ page }) {
+const NavBar = observer(({ page }) => {
     const [modalActive, setmodalActive] = useState(false)
     const [modalActiveSign, setmodalActiveSign] = useState(false)
+
+    const { user } = useContext(Context)
+
+    ////////Content Inside
+    let content = ''
+
+    const modalLogInContent = <SignInForm />
+    const modalSignUpContent = <SignUpForm />
 
     const logoutButton = (
         <li className="padd">
@@ -38,34 +48,8 @@ function NavBar({ page }) {
         </li>
     )
 
-    let modalLogIn = ''
-    let modalSignUp = ''
-
-    let content = ''
-
-    ////////Content Inside
-
-    const modalLogInContent = <SignInForm />
-    const modalSignUpContent = <SignUpForm />
-
     switch (page) {
         case '/':
-            modalLogIn = (
-                <ModalWindow
-                    active={modalActive}
-                    setActive={setmodalActive}
-                    children={modalLogInContent}
-                />
-            )
-
-            modalSignUp = (
-                <ModalWindow
-                    active={modalActiveSign}
-                    setActive={setmodalActiveSign}
-                    children={modalSignUpContent}
-                />
-            )
-
             content = (
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
                     <li className="buttons">
@@ -89,19 +73,20 @@ function NavBar({ page }) {
 
             break
 
-        case '':
-            content = ''
-
-            break
-        case '///':
-            content = ''
-            break
         default:
             content = (
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
                     {logoutButton}
                 </ul>
             )
+    }
+
+    if (user.isAuth) {
+        content = (
+            <ul id="nav-mobile" className="right hide-on-med-and-down">
+                {logoutButton}
+            </ul>
+        )
     }
 
     return (
@@ -116,10 +101,18 @@ function NavBar({ page }) {
                     </div>
                 </nav>
             </NavStyled>
-            {modalLogIn}
-            {modalSignUp}
+            <ModalWindow
+                active={modalActive}
+                setActive={setmodalActive}
+                children={modalLogInContent}
+            />
+            <ModalWindow
+                active={modalActiveSign}
+                setActive={setmodalActiveSign}
+                children={modalSignUpContent}
+            />
         </>
     )
-}
+})
 
 export default NavBar

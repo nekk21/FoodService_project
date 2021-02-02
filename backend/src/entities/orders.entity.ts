@@ -19,7 +19,7 @@ export default class OrderEntity {
     deliveryTime: Date
 
     @ManyToOne(() => UserEntity, users => users.orders, { eager: true })
-    @JoinColumn({ name: 'customer' })
+    @JoinColumn({ name: 'customer_id' })
     customer: UserEntity
 
     @OneToMany(() => OrdersDishes, ordersDishes => ordersDishes.order, {
