@@ -2,19 +2,35 @@ import * as yup from 'yup'
 import { useFormik } from 'formik'
 import { StyledForm } from './StyledForm'
 import { register } from '../../http/userAPI'
+import { logIn } from '../../http/userAPI'
 import { observer } from 'mobx-react-lite'
-// import { Context } from '../..'
-// import { useContext } from 'react'
+import { useHistory } from 'react-router-dom'
+import { Context } from '../..'
+import { useContext } from 'react'
 
 const SignUpForm = observer(() => {
-    // const { user } = useContext(Context)
+    const { user } = useContext(Context)
+    const history = useHistory()
+
     ///signUp in func
+
     const signUp = async data => {
         try {
             const response = await register(data)
-            console.log(response.data)
-            alert('Sucsess!')
-            return response
+            const registerData = response.data
+
+            const loginResponse = await logIn({
+                email: registerData.email,
+                password: data.password,
+            })
+            const userData = loginResponse.data
+            user.setIsAuth(true)
+            user.setUser(userData)
+            history.push('/user')
+            ///
+            console.log(user.isAuth)
+
+            return registerData
         } catch (e) {
             alert('User allready Exist!')
         }

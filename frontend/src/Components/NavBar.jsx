@@ -81,14 +81,6 @@ const NavBar = observer(({ page }) => {
             )
     }
 
-    if (user.isAuth) {
-        content = (
-            <ul id="nav-mobile" className="right hide-on-med-and-down">
-                {logoutButton}
-            </ul>
-        )
-    }
-
     return (
         <>
             <NavStyled>
