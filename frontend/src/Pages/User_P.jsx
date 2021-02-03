@@ -1,10 +1,10 @@
+import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
-
 import DaysContainer from '../Components/DaysContainer'
 import DishesContainer from '../Components/DishesContainer'
 import NavBar from '../Components/NavBar'
 
-function User_P(props) {
+const User_P = observer(() => {
     const path = '/user'
 
     useEffect(() => {
@@ -20,6 +20,6 @@ function User_P(props) {
             </div>
         </>
     )
-}
+})
 
 export default User_P

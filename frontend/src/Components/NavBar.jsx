@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite'
 import ModalWindow from './ModalWindow'
 import SignUpForm from './Forms/SignUpForm'
 import SignInForm from './Forms/SignInForm'
+import { logOut } from '../http/userAPI'
 import { Context } from '..'
 
 export const NavStyled = styled.div`
@@ -25,11 +26,12 @@ export const NavStyled = styled.div`
     }
 `
 
-const NavBar = observer(({ page }) => {
+const NavBar = observer(({ page, userData }) => {
     const [modalActive, setmodalActive] = useState(false)
     const [modalActiveSign, setmodalActiveSign] = useState(false)
 
     const { user } = useContext(Context)
+    const role = localStorage.getItem('role')
 
     ////////Content Inside
     let content = ''
@@ -40,10 +42,39 @@ const NavBar = observer(({ page }) => {
     const logoutButton = (
         <li className="padd">
             <button
-                onClick={() => {}}
+                onClick={() => {
+                    logOut().then(data => {
+                        if (data) {
+                            localStorage.clear()
+                            user.setIsAuth(false)
+                        }
+                    })
+                }}
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
             >
                 Log Out
+            </button>
+        </li>
+    )
+
+    const adminButton = (
+        <li className="padd">
+            <button
+                onClick={() => {}}
+                className="btn waves-effect waves-light #ffeb3b yellow black-text"
+            >
+                ADMIN PANEl
+            </button>
+        </li>
+    )
+
+    const cookButton = (
+        <li className="padd">
+            <button
+                onClick={() => {}}
+                className="btn waves-effect waves-light #ffeb3b yellow black-text"
+            >
+                KITCHEN
             </button>
         </li>
     )
@@ -79,6 +110,24 @@ const NavBar = observer(({ page }) => {
                     {logoutButton}
                 </ul>
             )
+    }
+
+    if (role === 'ADMIN') {
+        content = (
+            <ul id="nav-mobile" className="right hide-on-med-and-down">
+                {adminButton}
+                {logoutButton}
+            </ul>
+        )
+    }
+
+    if (role === 'COOK') {
+        content = (
+            <ul id="nav-mobile" className="right hide-on-med-and-down">
+                {cookButton}
+                {logoutButton}
+            </ul>
+        )
     }
 
     return (
