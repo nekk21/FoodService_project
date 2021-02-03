@@ -1,16 +1,26 @@
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { useContext, useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
 
 import CookRole_P from './Pages/CookRole_P'
 import User_P from './Pages/User_P'
 import Main_P from './Pages/Main_P'
 import AdminRole_P from './Pages/AdminRole_P'
-import { useContext } from 'react'
 import { Context } from '.'
-import { observer } from 'mobx-react-lite'
+import { getMydata } from './http/userAPI'
 
 const App = observer(() => {
     const { user } = useContext(Context)
-    console.log(user.isAuth)
+
+    useEffect(() => {
+        getMydata().then(data => {
+            if (data.status < 300) {
+                user.setUser(data.data)
+                user.setIsAuth(true)
+            }
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <>

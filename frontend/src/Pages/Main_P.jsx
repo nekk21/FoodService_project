@@ -1,18 +1,26 @@
-import React, { useEffect } from 'react'
+import { observer } from 'mobx-react-lite'
+import React, { useContext, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
+import { Context } from '..'
 import NavBar from '../Components/NavBar'
 
-function User_P(props) {
+const Main_P = observer(() => {
     const path = '/'
+    const { user } = useContext(Context)
 
     useEffect(() => {
         document.title = `Food | Service`
     })
+
+    if (user.isAuth) {
+        return <Redirect to="/user" />
+    }
 
     return (
         <>
             <NavBar page={path} />
         </>
     )
-}
+})
 
-export default User_P
+export default Main_P

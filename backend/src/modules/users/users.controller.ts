@@ -63,7 +63,7 @@ export class UsersController {
     @Get('logout')
     async logout(@Request() req) {
         req.logout()
-        return 'Logged out'
+        return true
     }
 
     @Roles('ADMIN')

@@ -1,7 +1,13 @@
-import { $host } from './axios'
+import { $authHost, $host } from './axios'
+import jwt from 'jwt-decode'
 
 export const logIn = async formData => {
     const response = await $host.post('/users/signin', formData)
+    localStorage.setItem('token', response.data.token)
+    const decodeData = jwt(response.data.token)
+    if (decodeData.role != null) {
+        localStorage.setItem('role', decodeData.role)
+    }
     return response
 }
 
@@ -10,24 +16,12 @@ export const register = async formData => {
     return response
 }
 
-// export const register = async formData => {
-//     const response = await fetch(`http://localhost:4000/users/signup`, {
-//         method: 'POST',
-//         body: JSON.stringify(formData),
-//         headers: {
-//             'Content-Type': 'application/json',
-//         },
-//     })
-//     const result = await response.json()
-//     result.status = response.status
+export const logOut = async () => {
+    const response = await $authHost.get('/users/logout')
+    return response
+}
 
-//     if (result.status < 300) {
-//         logIn({
-//             email: result.email,
-//             password: formData.password,
-//         })
-//     } else if (result.status > 300) {
-//         console.log(result.message)
-//     }
-//     return result
-// }
+export const getMydata = async () => {
+    const response = await $authHost.get('/users/me')
+    return response
+}
