@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { observer } from 'mobx-react-lite'
 //
 import ModalWindow from './ModalWindow'
@@ -29,6 +29,8 @@ export const NavStyled = styled.div`
 const NavBar = observer(({ page, userData }) => {
     const [modalActive, setmodalActive] = useState(false)
     const [modalActiveSign, setmodalActiveSign] = useState(false)
+
+    const history = useHistory()
 
     const { user } = useContext(Context)
     const role = localStorage.getItem('role')
@@ -60,7 +62,9 @@ const NavBar = observer(({ page, userData }) => {
     const adminButton = (
         <li className="padd">
             <button
-                onClick={() => {}}
+                onClick={() => {
+                    history.push('/admin')
+                }}
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
             >
                 ADMIN PANEl
@@ -71,7 +75,9 @@ const NavBar = observer(({ page, userData }) => {
     const cookButton = (
         <li className="padd">
             <button
-                onClick={() => {}}
+                onClick={() => {
+                    history.push('/cook')
+                }}
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
             >
                 KITCHEN
