@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { useHistory } from 'react-router-dom'
 import { Context } from '../..'
 import { useContext } from 'react'
+import M from 'materialize-css'
 
 const SignUpForm = observer(() => {
     const { user } = useContext(Context)
@@ -32,7 +33,7 @@ const SignUpForm = observer(() => {
 
             return registerData
         } catch (e) {
-            alert('User allready Exist!')
+            M.toast({ html: 'User allready exist!' })
         }
     }
 

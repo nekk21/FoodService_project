@@ -6,6 +6,7 @@ import * as yup from 'yup'
 import { Context } from '../..'
 import { logIn } from '../../http/userAPI'
 import { StyledForm } from './StyledForm'
+import M from 'materialize-css'
 
 const SignInForm = observer(() => {
     const { user } = useContext(Context)
@@ -25,7 +26,7 @@ const SignInForm = observer(() => {
             ///
             return response
         } catch (e) {
-            alert('Wrong Input Data!')
+            M.toast({ html: 'Wrong input DATA!!!' })
         }
     }
 

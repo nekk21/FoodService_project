@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "formik": "^2.2.6",
     "jwt-decode": "^3.1.2",
+    "materialize-css": "^1.0.0-rc.2",
     "mobx": "^6.0.4",
     "mobx-react-lite": "^3.1.6",
     "react": "^17.0.1",
@@ -45,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/materialize-css": "^1.0.8",
     "@types/react-router-dom": "^5.1.7"
   }
 }
