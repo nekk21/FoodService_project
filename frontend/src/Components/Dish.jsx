@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 const StyledDish = styled.div`
     width: 15rem;
-    margin: 2rem;
+    margin: 1rem;
 
     .btn{
         margin-left 5px;
@@ -54,7 +54,7 @@ function Dish(props) {
                 </div>
                 <div className="card-content">
                     <span className="card-title activator grey-text text-darken-4">
-                        {props.title} Card Title
+                        {props.name}
                         <i className="material-icons right">more_vert</i>
                     </span>
                     <p>
@@ -63,16 +63,14 @@ function Dish(props) {
                 </div>
                 <div className="card-reveal">
                     <span className="card-title grey-text text-darken-4">
-                        Card Title
+                        {props.name}
                         <i className="material-icons right">close</i>
                     </span>
                     <span className="card-title grey-text text-darken-4">
-                        Price $
+                        {props.price}$
                     </span>
-                    <p>
-                        Here is some more information about this product that is
-                        only revealed once clicked on.
-                    </p>
+                    <p>{props.description}</p>
+                    <p>Cook: {props.cookEmail}</p>
                     <p>{editButtonCook}</p>
                 </div>
             </div>

@@ -67,11 +67,9 @@ export class OrdersService {
     ): Promise<OrderEntity> {
         const customer = await this.userRepository.findOne(customer_id)
 
-        const date = delivery_time.data
-
         const newOrder = new OrderEntity()
         newOrder.customer = customer
-        newOrder.deliveryTime = date
+        newOrder.deliveryTime = delivery_time
 
         const errors = await validate(newOrder)
         if (errors.length > 0) {

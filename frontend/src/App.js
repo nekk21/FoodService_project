@@ -12,13 +12,17 @@ import { getMydata } from './http/userAPI'
 const App = observer(() => {
     const { user } = useContext(Context)
 
+    const fetchMe = async () => {
+        const response = await getMydata()
+        user.setUser(response.data)
+        user.setIsAuth(true)
+        if (response === {}) {
+            localStorage.clear()
+        }
+    }
+
     useEffect(() => {
-        getMydata().then(data => {
-            if (data.status < 300) {
-                user.setUser(data.data)
-                user.setIsAuth(true)
-            }
-        })
+        fetchMe()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
