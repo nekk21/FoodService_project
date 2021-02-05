@@ -23,5 +23,6 @@ export const logOut = async () => {
 
 export const getMydata = async () => {
     const response = await $authHost.get('/users/me')
+
     return response
 }
