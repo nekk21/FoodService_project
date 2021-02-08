@@ -24,6 +24,14 @@ export const NavStyled = styled.div`
     .buttons {
         margin-left: 1.3rem;
     }
+    .bramd-logo {
+        font-family: inherit;
+    }
+    .arrow {
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
 `
 
 const NavBar = observer(({ page, userData }) => {
@@ -85,6 +93,20 @@ const NavBar = observer(({ page, userData }) => {
         </li>
     )
 
+    const backButton = (
+        <li className="padd">
+            <button
+                onClick={() => {
+                    history.push('/user')
+                }}
+                className="btn waves-effect waves-light #ffeb3b yellow black-text"
+            >
+                BACK
+                <i className="arrow material-icons left">chevron_left</i>
+            </button>
+        </li>
+    )
+
     switch (page) {
         case '/':
             content = (
@@ -110,6 +132,26 @@ const NavBar = observer(({ page, userData }) => {
 
             break
 
+        case '/cook':
+            content = (
+                <ul id="nav-mobile" className="right hide-on-med-and-down">
+                    {backButton}
+                    {logoutButton}
+                </ul>
+            )
+
+            break
+
+        case '/admin':
+            content = (
+                <ul id="nav-mobile" className="right hide-on-med-and-down">
+                    {backButton}
+                    {logoutButton}
+                </ul>
+            )
+
+            break
+
         default:
             content = (
                 <ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -118,7 +160,7 @@ const NavBar = observer(({ page, userData }) => {
             )
     }
 
-    if (role === 'ADMIN') {
+    if (role === 'ADMIN' && page === '/user') {
         content = (
             <ul id="nav-mobile" className="right hide-on-med-and-down">
                 {adminButton}
@@ -127,7 +169,7 @@ const NavBar = observer(({ page, userData }) => {
         )
     }
 
-    if (role === 'COOK') {
+    if (role === 'COOK' && page === '/user') {
         content = (
             <ul id="nav-mobile" className="right hide-on-med-and-down">
                 {cookButton}

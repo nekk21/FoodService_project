@@ -1,5 +1,8 @@
 import image from '../images/image.jpg'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
+import { useContext } from 'react'
+import { Context } from '..'
 
 const StyledDish = styled.div`
     width: 15rem;
@@ -8,9 +11,20 @@ const StyledDish = styled.div`
     .btn{
         margin-left 5px;
     }
+    .description{
+        word-break: break-word;
+    }
+
+    .wrapper {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
 `
 
-function Dish(props) {
+const Dish = observer(props => {
+    const { dish } = useContext(Context)
+
     let customerButton = ''
 
     let deleteButtonCook = ''
@@ -21,7 +35,10 @@ function Dish(props) {
         deleteButtonCook = (
             <button
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
-                onClick={() => {}}
+                onClick={() => {
+                    dish.setDish(props)
+                    props.deleteFunction()
+                }}
             >
                 Delete
             </button>
@@ -30,7 +47,10 @@ function Dish(props) {
         editButtonCook = (
             <button
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
-                onClick={() => {}}
+                onClick={() => {
+                    dish.setDish(props)
+                    props.setActivatorEdit(true)
+                }}
             >
                 Edit
             </button>
@@ -39,7 +59,9 @@ function Dish(props) {
         customerButton = (
             <button
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
-                onClick={() => {}}
+                onClick={() => {
+                    dish.setDish(props)
+                }}
             >
                 Order
             </button>
@@ -69,13 +91,13 @@ function Dish(props) {
                     <span className="card-title grey-text text-darken-4">
                         {props.price}$
                     </span>
-                    <p>{props.description}</p>
+                    <p className="description">{props.description}</p>
                     <p>Cook: {props.cookEmail}</p>
                     <p>{editButtonCook}</p>
                 </div>
             </div>
         </StyledDish>
     )
-}
+})
 
 export default Dish

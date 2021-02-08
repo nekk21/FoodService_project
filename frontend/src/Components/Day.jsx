@@ -174,6 +174,9 @@ const StyledDay = styled.div`
         background: currentColor;
         opacity: 0.2;
     }
+    .btn {
+        padding: 3px;
+    }
 `
 
 function Day(props) {
@@ -199,7 +202,7 @@ function Day(props) {
                         </figure>
 
                         <button className="btn waves-effect waves-light #ffeb3b yellow black-text">
-                            Order
+                            CANCEL ORDER
                         </button>
                     </div>
                 </div>
