@@ -56,7 +56,7 @@ export class DishesController {
     }
 
     @Roles('COOK', 'ADMIN')
-    @Delete('')
+    @Delete()
     async deleteDish(
         @Request() req,
         @Body('id') id: number

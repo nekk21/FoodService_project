@@ -19,7 +19,7 @@ export const LoginModalStyle = styled.div`
     .modalWindow.active {
         pointer-events: all;
         opacity: 1;
-        z-index: 1;
+        z-index: 4;
     }
     .modal_content {
         padding: 20px;

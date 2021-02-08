@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react'
 import Dish from './Dish'
-import image from '../images/wood.jpg'
 import styled from 'styled-components'
 import { Context } from '..'
 import { getAllDishes } from '../http/dishesAPI'
@@ -12,12 +11,13 @@ const StyledDishContainer = styled.div`
     margin: 0 auto;
 
     border-radius: 30px;
-    background: url(${image});
+    background: #424242;
     position: relative;
     display: flex;
     flex-wrap: wrap;
     margin-top: 40px;
     margin-bottom: 30px;
+    padding: 0px 2rem;
     .menu {
         display: flex;
         width: 100%;

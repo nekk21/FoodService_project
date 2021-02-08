@@ -13,10 +13,11 @@ const App = observer(() => {
     const { user } = useContext(Context)
 
     const fetchMe = async () => {
-        const response = await getMydata()
-        user.setUser(response.data)
-        user.setIsAuth(true)
-        if (response === {}) {
+        try {
+            const response = await getMydata()
+            user.setUser(response.data)
+            user.setIsAuth(true)
+        } catch (e) {
             localStorage.clear()
         }
     }
