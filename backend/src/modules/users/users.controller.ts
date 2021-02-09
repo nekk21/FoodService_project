@@ -31,10 +31,6 @@ export class UsersController {
     @Post('signup')
     async signup(@Body() data: CreateUserDto, @Body('role') role: RoleEntity) {
         const user = await this.userService.create(data, role)
-        // const loginedUser = await this.login({
-        //     email: data.email,
-        //     password: data.password,
-        // })
 
         return user
     }
@@ -78,6 +74,11 @@ export class UsersController {
         return await this.userService.getById(id)
     }
 
+    @Post('profile')
+    async findProfileByEmail(@Body() email: string): Promise<UserEntity> {
+        return await this.userService.getByEmail(email)
+    }
+
     @Get('/me')
     async GetMe(@Request() req): Promise<UserEntity> {
         return await this.userService.getById(req.user.id)
@@ -103,7 +104,14 @@ export class UsersController {
     @Roles('ADMIN')
     @Delete('/this')
     async adminDelete(@Body() id: number) {
-        const deleteResult = await this.userService.adminDeleteById(id)
+        const deleteResult = await this.userService.deleteById(id)
+        return deleteResult
+    }
+
+    @Roles('ADMIN')
+    @Delete('/email')
+    async adminDeleteEmail(@Body('email') email: string): Promise<UserEntity> {
+        const deleteResult = await this.userService.deleteByEmail(email)
         return deleteResult
     }
 

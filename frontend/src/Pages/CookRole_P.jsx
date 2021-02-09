@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
-import Dish from '../Components/Dish'
-import NavBar from '../Components/NavBar'
+import M from 'materialize-css'
 import styled from 'styled-components'
 import { observer } from 'mobx-react-lite'
+
 import { Context } from '..'
 import { getMyDishes, postDish, editDish, deleteDish } from '../http/dishesAPI'
+import Dish from '../Components/Dish'
+import NavBar from '../Components/NavBar'
 import DishCreateForm from '../Components/Forms/DishCreateForm'
 import ModalWindow from '../Components/ModalWindow'
 import DishEditForm from '../Components/Forms/DishEditForm'
@@ -47,8 +49,8 @@ const CookRole_P = observer(() => {
         getMyDishes().then(data => {
             dish.setDishes(data)
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dish.dishes])
+    }, [dish])
+
     //////////////////////////edit dish
     const editSubmit = async values => {
         try {
@@ -56,12 +58,17 @@ const CookRole_P = observer(() => {
                 ...values,
                 dish_id: dish.dish.id,
             })
+            /////rerender
+            const dishes = await getMyDishes()
+            dish.setDishes(dishes)
+
             setActivatorEdit(false)
             return response
         } catch (e) {
             console.log(e)
         }
     }
+
     /////////////////////////delete dish
     const deleteSubmit = async () => {
         try {
@@ -70,16 +77,23 @@ const CookRole_P = observer(() => {
             )
             if (confirm) {
                 const response = await deleteDish(dish.dish.id)
+                ////rerender
+                const dishes = await getMyDishes()
+                dish.setDishes(dishes)
                 return response
             }
         } catch (e) {
-            console.log(e)
+            M.toast({ html: 'Active order contain this dish!!!' })
         }
     }
+
     /////////////////////////create dish
     const createSubmit = async values => {
         try {
             const response = await postDish(values)
+            //rerender
+            const dishes = await getMyDishes()
+            dish.setDishes(dishes)
             setActivator(false)
             return response
         } catch (e) {

@@ -15,8 +15,8 @@ export default class OrderEntity {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column({ name: 'delivery_time' })
-    deliveryTime: Date
+    @Column({ name: 'delivery_time', type: 'bigint' })
+    deliveryTime: number
 
     @ManyToOne(() => UserEntity, users => users.orders, { eager: true })
     @JoinColumn({ name: 'customer_id' })

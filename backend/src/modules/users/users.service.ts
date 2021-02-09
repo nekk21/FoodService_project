@@ -46,16 +46,14 @@ export class UsersService {
         return user
     }
 
-    async deleteByEmail(email: string): Promise<DeleteResult> {
-        return await this.userRepository.delete({ email: email })
+    async deleteByEmail(email: string): Promise<UserEntity> {
+        const user = await this.getByEmail(email)
+        return await this.userRepository.remove(user)
     }
 
-    async deleteById(id: number): Promise<DeleteResult> {
-        return await this.userRepository.delete({ id: id })
-    }
-
-    async adminDeleteById(id: number): Promise<DeleteResult> {
-        return await this.userRepository.delete(id)
+    async deleteById(id: number): Promise<UserEntity> {
+        const user = await this.getById(id)
+        return await this.userRepository.remove(user)
     }
 
     async create(
