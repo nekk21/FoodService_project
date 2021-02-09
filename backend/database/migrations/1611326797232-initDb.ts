@@ -15,7 +15,7 @@ export class initDb1621326798232 implements MigrationInterface {
        
        
        CREATE TABLE ORDERS(id serial primary key,
-           delivery_time date NOT NULL,
+           delivery_time bigint NOT NULL,
            customer_id integer references USERS(id));
        
        CREATE TABLE DISHES(id serial primary key,

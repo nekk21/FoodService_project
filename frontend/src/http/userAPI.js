@@ -26,3 +26,16 @@ export const getMydata = async () => {
 
     return response
 }
+
+export const getUsers = async () => {
+    const { data } = await $authHost.get('/users')
+    return data
+}
+
+export const deleteUserEmail = async email => {
+    const { data } = await $authHost.delete('/users/email', {
+        data: { email: email },
+    })
+
+    return data
+}
