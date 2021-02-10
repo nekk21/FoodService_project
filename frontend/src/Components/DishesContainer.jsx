@@ -1,9 +1,11 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Dish from './Dish'
 import styled from 'styled-components'
 import { Context } from '..'
 import { getAllDishes } from '../http/dishesAPI'
 import { observer } from 'mobx-react-lite'
+import ModalWindow from './ModalWindow'
+import OrderCreateForm from './Forms/OrderCreateForm'
 
 const StyledDishContainer = styled.div`
     border: 1px solid black;
@@ -28,8 +30,11 @@ const StyledDishContainer = styled.div`
     }
 `
 
-const DishesContainer = observer(() => {
+const DishesContainer = observer(({ page }) => {
     const { dish } = useContext(Context)
+
+    const [activeModal, setActiveModal] = useState(false)
+    const child = <OrderCreateForm />
 
     useEffect(() => {
         getAllDishes().then(data => {
@@ -41,14 +46,22 @@ const DishesContainer = observer(() => {
 
     return (
         <StyledDishContainer>
+            <ModalWindow
+                active={activeModal}
+                setActive={setActiveModal}
+                children={child}
+            />
             <h1 className="menu">M_E_N_U</h1>
             {dish.dishes.map(dish => (
                 <Dish
                     key={dish.id}
+                    id={dish.id}
                     name={dish.name}
                     description={dish.description}
                     price={dish.price}
                     cookEmail={dish.cook.email}
+                    page={page}
+                    setActiveModal={setActiveModal}
                 ></Dish>
             ))}
         </StyledDishContainer>

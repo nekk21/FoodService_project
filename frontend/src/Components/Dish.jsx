@@ -61,11 +61,16 @@ const Dish = observer(props => {
                 className="btn waves-effect waves-light #ffeb3b yellow black-text"
                 onClick={() => {
                     dish.setDish(props)
+                    props.setActiveModal(true)
                 }}
             >
                 Order
             </button>
         )
+    }
+
+    if (props.page === '/') {
+        customerButton = ''
     }
 
     return (

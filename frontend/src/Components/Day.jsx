@@ -1,5 +1,6 @@
 import React from 'react'
 import image from '../images/paper.jpg'
+import imageBack from '../images/rubashka.jpg'
 import styled from 'styled-components'
 
 const StyledDay = styled.div`
@@ -198,7 +199,7 @@ function Day(props) {
 
                     <div className="card-back">
                         <figure>
-                            <img src={image} alt="Brohm Lake" />
+                            <img src={imageBack} alt="rubashka" />
                         </figure>
 
                         <button className="btn waves-effect waves-light #ffeb3b yellow black-text">
