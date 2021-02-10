@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import { Context } from '..'
+import DishesContainer from '../Components/DishesContainer'
 import NavBar from '../Components/NavBar'
 
 const Main_P = observer(() => {
@@ -19,6 +20,7 @@ const Main_P = observer(() => {
     return (
         <>
             <NavBar page={path} />
+            <DishesContainer page={path} />
         </>
     )
 })

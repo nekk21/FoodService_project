@@ -8,6 +8,7 @@ import {
     Put,
     Request,
 } from '@nestjs/common'
+import { Public } from 'src/decorators/public.decorator'
 import { Roles } from 'src/decorators/role.decorator'
 import DishEntity from 'src/entities/dishes.entity'
 import { DishesService } from './dishes.service'
@@ -42,7 +43,7 @@ export class DishesController {
         const dishes = await this.DishService.getMyDishes(req.user.id)
         return dishes
     }
-
+    @Public()
     @Get()
     async getDishes(): Promise<DishEntity[]> {
         const dishes = await this.DishService.getAll()
