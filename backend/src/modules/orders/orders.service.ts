@@ -38,7 +38,6 @@ export class OrdersService {
                 order: order,
             },
         })
-
         await this.ordersDishesRepository.remove(orders_dishes)
 
         return await this.orderRepository.remove(order)

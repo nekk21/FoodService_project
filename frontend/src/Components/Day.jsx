@@ -1,7 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import image from '../images/paper.jpg'
 import imageBack from '../images/rubashka.jpg'
 import styled from 'styled-components'
+import { observer } from 'mobx-react-lite'
+import { Context } from '..'
+import { toJS } from 'mobx'
+import { getTimestamp } from '../CostomFunc/customFunctions'
+import { deleteOrder, getOrders } from '../http/ordersAPI'
 
 const StyledDay = styled.div`
     @import url('https://fonts.googleapis.com/css?family=Lato');
@@ -159,7 +164,7 @@ const StyledDay = styled.div`
     }
 
     li:nth-child(2n) {
-        color: var(--white-2);
+        color: black;
     }
 
     li:not(:last-child)::after {
@@ -180,7 +185,29 @@ const StyledDay = styled.div`
     }
 `
 
-function Day(props) {
+const Day = observer(props => {
+    const { order } = useContext(Context)
+
+    let cardContentTime = ''
+    let cardContentDish = ''
+    let cardContentDishPrice = ''
+    let order_id
+
+    const orders = toJS(order.orders)
+
+    const result = orders.filter(
+        order => getTimestamp(+order.deliveryTime).dayOfWeek === props.day
+    )
+
+    if (result.length > 0) {
+        cardContentTime = getTimestamp(+result[0].deliveryTime).fullDate
+        cardContentDish = result[0].ordersDishes[0].dish.name
+        cardContentDishPrice = result[0].ordersDishes[0].dish.price + ' $'
+        order_id = result[0].id
+    } else {
+        cardContentTime = 'ORDER CARD'
+    }
+
     return (
         <StyledDay>
             <div className="flip-card-container">
@@ -192,8 +219,10 @@ function Day(props) {
                         </figure>
 
                         <ul>
-                            {props.order}
-                            <li>ORDER CARD</li>
+                            <li>{cardContentTime}</li>
+                            <li>
+                                {cardContentDish} {cardContentDishPrice}
+                            </li>
                         </ul>
                     </div>
 
@@ -202,7 +231,20 @@ function Day(props) {
                             <img src={imageBack} alt="rubashka" />
                         </figure>
 
-                        <button className="btn waves-effect waves-light #ffeb3b yellow black-text">
+                        <button
+                            className="btn waves-effect waves-light #ffeb3b yellow black-text"
+                            onClick={() => {
+                                const confirm = window.confirm(
+                                    `Are u sure? You want to cancel this order?!`
+                                )
+                                if (confirm) {
+                                    deleteOrder(order_id)
+                                    getOrders().then(orders => {
+                                        order.setOrders(orders)
+                                    })
+                                }
+                            }}
+                        >
                             CANCEL ORDER
                         </button>
                     </div>
@@ -210,6 +252,6 @@ function Day(props) {
             </div>
         </StyledDay>
     )
-}
+})
 
 export default Day

@@ -63,8 +63,6 @@ const AdminRole_P = observer(() => {
                 user.setUsers(users)
                 return response
             }
-
-            AdminRole_P.forceUpdate(() => {})
         } catch (e) {
             M.toast({ html: 'User still have active order/dish!!!' })
         }

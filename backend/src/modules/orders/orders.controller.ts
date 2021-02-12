@@ -27,16 +27,15 @@ export class OrdersController {
         return order
     }
 
-    @Post('')
+    @Post()
     async postOrder(
         @Request() req,
         @Body() data: string
     ): Promise<OrderEntity> {
-        ///test version
         return await this.ordersService.create(req.user.id, data)
     }
 
-    @Put('')
+    @Put()
     async addDish(
         @Request() req,
         @Body('orderId') orderId: number,

@@ -1,59 +1,64 @@
 import { observer } from 'mobx-react-lite'
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Context } from '../..'
-import * as yup from 'yup'
-import { StyledForm } from './StyledForm'
-import { getTimestamp } from '../../CostomFunc/customFunctions'
-import { useFormik } from 'formik'
+////datepicker
+import DatePicker from 'react-datepicker'
+import { addDays, setHours, setMinutes } from 'date-fns'
+import 'react-datepicker/dist/react-datepicker.css'
+////other import
 import M from 'materialize-css'
+import styled from 'styled-components'
+import { getOrders, postOrder } from '../../http/ordersAPI'
+import { toJS } from 'mobx'
+import { getTimestamp } from '../../CostomFunc/customFunctions'
+
+const StyledDate = styled.div`
+    .btn {
+        z-index: 0;
+        margin-top: 20px;
+    }
+`
 
 const OrderCreateForm = observer(props => {
     const { dish } = useContext(Context)
+    const { order } = useContext(Context)
 
-    ///date now
-    const today = Date.now()
-
-    //// obj with all data of Date
-    const todayStr = getTimestamp(today)
-
-    ////form settings
-    const DishCreateSchema = yup.object().shape({
-        date: yup.string().required('Required!'),
-
-        time: yup.string().required('Required!'),
-    })
-
-    const formik = useFormik({
-        ///////////////////////!
-        initialValues: {
-            date: '',
-            time: '',
-        },
-        validationSchema: DishCreateSchema,
-        onSubmit: values => {
-            console.log(values)
-        },
-    })
-
-    //pickers initialization
-    document.addEventListener('DOMContentLoaded', () => {
-        const timepicker = document.querySelectorAll('.timepicker')
-        const instanceTime = M.Timepicker.init(timepicker, {
-            twelveHour: false,
+    useEffect(() => {
+        getOrders().then(orders => {
+            order.setOrders(orders)
         })
+    }, [order])
 
-        const datepicker = document.querySelectorAll('.datepicker')
-        const instanceDate = M.Datepicker.init(datepicker, { firstDay: 1 })
-    })
+    const orders = toJS(order.orders)
+
+    const [startDate, setStartDate] = useState(
+        setHours(setMinutes(new Date(), 0), 7)
+    )
+
+    const isWeekday = date => {
+        const day = date.getDay()
+        return day !== 0 && day !== 6
+    }
+
+    const orderPost = async inputDate => {
+        try {
+            const date = inputDate.toString()
+            const response = await postOrder({
+                date: date,
+                dishId: dish.dish.id,
+            })
+            M.toast({ html: 'Order has been added!' })
+            getOrders().then(orders => {
+                order.setOrders(orders)
+            })
+            return response
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
-        <StyledForm>
-            <div>
-                <p>
-                    <strong>Today</strong> : {todayStr.fullDate}
-                </p>
-            </div>
-
+        <StyledDate>
             <div>
                 <strong> A good choice :)</strong>
                 <p>
@@ -62,39 +67,44 @@ const OrderCreateForm = observer(props => {
                 </p>
             </div>
 
-            <form onSubmit={formik.handleSubmit}>
-                <input
-                    name="date"
-                    type="text"
-                    className="validate datepicker" //datepicker
-                    onChange={formik.handleChange}
-                    value={formik.values.date}
-                />
-                {formik.errors.date && formik.touched.date ? (
-                    <div className="warning">{formik.errors.date}</div>
-                ) : null}
+            <DatePicker
+                minDate={new Date()}
+                selected={startDate}
+                timeFormat="HH:mm"
+                timeInputLabel="Time:"
+                onChange={date => setStartDate(date)}
+                filterDate={isWeekday}
+                dateFormat="dd/MM/yyyy HH:mm"
+                maxDate={addDays(new Date(), 7)}
+                minTime={setHours(setMinutes(new Date(), 0), 7)}
+                maxTime={setHours(setMinutes(new Date(), 30), 22)}
+                showTimeSelect
+            />
 
-                <input
-                    name="time"
-                    type="text"
-                    className="validate timepicker" //timepicker
-                    onChange={formik.handleChange}
-                    value={formik.values.time}
-                />
-                {formik.errors.time && formik.touched.time ? (
-                    <div className="warning">{formik.errors.time}</div>
-                ) : null}
-
-                <div className="buttons">
-                    <button
-                        className="btn waves-effect waves-light #ffeb3b yellow black-text"
-                        type="submit"
-                    >
-                        Submit
-                    </button>
-                </div>
-            </form>
-        </StyledForm>
+            <div className="buttons">
+                <button
+                    className="btn waves-effect waves-light #ffeb3b yellow black-text"
+                    type="submit"
+                    onClick={() => {
+                        if (
+                            orders.filter(
+                                order =>
+                                    getTimestamp(+order.deliveryTime)
+                                        .dayOfWeek ===
+                                    getTimestamp(+startDate).dayOfWeek
+                            ).length < 1
+                        ) {
+                            orderPost(startDate)
+                            props.setActiveModal(false)
+                        } else {
+                            M.toast({ html: 'U have an order on this Day!' })
+                        }
+                    }}
+                >
+                    Submit
+                </button>
+            </div>
+        </StyledDate>
     )
 })
 
