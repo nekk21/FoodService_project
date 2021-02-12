@@ -4,21 +4,21 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 
 import DishStore from './Store/DishStore'
+import OrderStore from './Store/OrderStore'
 import UserStore from './Store/UserStore'
 
 export const Context = createContext(null)
 
 ReactDOM.render(
-    <React.StrictMode>
-        <Context.Provider
-            value={{
-                user: new UserStore(),
-                dish: new DishStore(),
-            }}
-        >
-            <App />
-        </Context.Provider>
-    </React.StrictMode>,
+    <Context.Provider
+        value={{
+            user: new UserStore(),
+            dish: new DishStore(),
+            order: new OrderStore(),
+        }}
+    >
+        <App />
+    </Context.Provider>,
     document.getElementById('root')
 )
 

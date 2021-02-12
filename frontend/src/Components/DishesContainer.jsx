@@ -34,7 +34,7 @@ const DishesContainer = observer(({ page }) => {
     const { dish } = useContext(Context)
 
     const [activeModal, setActiveModal] = useState(false)
-    const child = <OrderCreateForm />
+    const child = <OrderCreateForm setActiveModal={setActiveModal} />
 
     useEffect(() => {
         getAllDishes().then(data => {

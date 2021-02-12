@@ -1,14 +1,6 @@
 export const getTimestamp = timestamp => {
     let date = new Date(timestamp)
-    let days = [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-    ]
+    let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     let year = date.getFullYear()
     let month = ('0' + (date.getMonth() + 1)).substr(-2)
     let day = ('0' + date.getDate()).substr(-2)
